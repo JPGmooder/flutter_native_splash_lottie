@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print('ready in 1...');
     await Future.delayed(const Duration(seconds: 1));
     print('go!');
-    FlutterNativeSplash.remove();
+   // FlutterNativeSplash.remove();
   }
 
   @override
