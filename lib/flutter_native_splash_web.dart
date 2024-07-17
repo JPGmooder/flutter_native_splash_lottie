@@ -32,11 +32,12 @@ class FlutterNativeSplashWeb {
           );
         }
         return;
+      case 'preserve':
+        break;
       default:
         throw PlatformException(
           code: 'Unimplemented',
-          details:
-              "flutter_native_splash for web doesn't implement '${call.method}'",
+          details: "flutter_native_splash for web doesn't implement '${call.method}'",
         );
     }
   }

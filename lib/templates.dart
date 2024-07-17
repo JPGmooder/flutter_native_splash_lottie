@@ -556,7 +556,7 @@ String _webLottieJS(String path) => '''
  <script id="splash-screen-lottie-import" src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.4/lottie.min.js"></script>
    <script id="splash-screen-lottie-script">
     function loadAnimation() {
-      const animationPath = 'assets/logo_animation.json';
+      const animationPath = '$path';
       const animationOptions = {
         container: document.getElementById('splash'),
         renderer: 'svg',
