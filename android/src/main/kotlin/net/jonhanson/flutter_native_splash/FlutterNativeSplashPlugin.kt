@@ -25,11 +25,11 @@ class FlutterNativeSplashPlugin : FlutterPlugin, MethodCallHandler, ActivityAwar
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         context = flutterPluginBinding.applicationContext
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_native_splash")
+        channel?.setMethodCallHandler(this)
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         mainActivity = binding.activity as FlutterFragmentActivity
-        channel?.setMethodCallHandler(this)
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
