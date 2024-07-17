@@ -63,11 +63,16 @@ class FlutterNativeSplashPlugin : FlutterPlugin, MethodCallHandler, ActivityAwar
     }
 
     private fun addLottieAnimation() {
-            val inflater = LayoutInflater.from(context)
-            val root = mainActivity.findViewById<FrameLayout>(android.R.id.content)
-            val layoutId = context.resources.getIdentifier("splash", "layout", context.packageName)
-            rootView = inflater.inflate(layoutId, root, false)
-            root.addView(rootView, FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
+        val layoutId = context.resources.getIdentifier("splash", "layout", context.packageName)
+
+        if (layoutId == 0) {
+            return
+        }
+
+      val inflater = LayoutInflater.from(mainActivity)
+      val root = mainActivity.findViewById<FrameLayout>(android.R.id.content)
+      rootView = inflater.inflate(layoutId, root, false)
+      root.addView(rootView, FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
     }
 
     private fun removeLottieAnimation() {
