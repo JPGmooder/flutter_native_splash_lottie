@@ -14,8 +14,7 @@ class _AndroidDrawableTemplate {
 final _imagesTemplates = _generateImageTemplates();
 final _imageDarkTemplates = _generateImageTemplates(dark: true);
 final _imagesAndroid12Templates = _generateImageTemplates(android12: true);
-final _imagesAndroid12DarkTemplates =
-    _generateImageTemplates(android12: true, dark: true);
+final _imagesAndroid12DarkTemplates = _generateImageTemplates(android12: true, dark: true);
 
 List<_AndroidDrawableTemplate> _generateImageTemplates({
   bool dark = false,
@@ -49,6 +48,7 @@ List<_AndroidDrawableTemplate> _generateImageTemplates({
 
 /// Create Android splash screen
 void _createAndroidSplash({
+  required String? lottie,
   required String? imagePath,
   required String? darkImagePath,
   required String? android12ImagePath,
@@ -71,42 +71,59 @@ void _createAndroidSplash({
   String? android12BrandingImagePath,
   String? android12DarkBrandingImagePath,
 }) {
-  _applyImageAndroid(imagePath: imagePath);
+  if (lottie == null) {
+    _applyImageAndroid(imagePath: imagePath);
 
-  _applyImageAndroid(imagePath: darkImagePath, dark: true);
+    _applyImageAndroid(imagePath: darkImagePath, dark: true);
 
-  //create resources for branding image if provided
-  _applyImageAndroid(imagePath: brandingImagePath, fileName: 'branding.png');
+    //create resources for branding image if provided
+    _applyImageAndroid(imagePath: brandingImagePath, fileName: 'branding.png');
 
-  _applyImageAndroid(
-    imagePath: brandingDarkImagePath,
-    dark: true,
-    fileName: 'branding.png',
-  );
+    _applyImageAndroid(
+      imagePath: brandingDarkImagePath,
+      dark: true,
+      fileName: 'branding.png',
+    );
 
-  //create android 12 image if provided.  (otherwise uses launch icon)
-  _applyImageAndroid(
-    imagePath: android12ImagePath,
-    fileName: 'android12splash.png',
-  );
+    //create android 12 image if provided.  (otherwise uses launch icon)
+    _applyImageAndroid(
+      imagePath: android12ImagePath,
+      fileName: 'android12splash.png',
+    );
 
-  _applyImageAndroid(
-    imagePath: android12DarkImagePath,
-    dark: true,
-    fileName: 'android12splash.png',
-  );
+    _applyImageAndroid(
+      imagePath: android12DarkImagePath,
+      dark: true,
+      fileName: 'android12splash.png',
+    );
 
-  _applyImageAndroid(
-    imagePath: android12BrandingImagePath,
-    android12: true,
-    fileName: 'android12branding.png',
-  );
+    _applyImageAndroid(
+      imagePath: android12BrandingImagePath,
+      android12: true,
+      fileName: 'android12branding.png',
+    );
 
-  _applyImageAndroid(
-    imagePath: android12DarkBrandingImagePath,
-    dark: true,
-    android12: true,
-    fileName: 'android12branding.png',
+    _applyImageAndroid(
+      imagePath: android12DarkBrandingImagePath,
+      dark: true,
+      android12: true,
+      fileName: 'android12branding.png',
+    );
+
+    _deleteLottieAndroid();
+  } else {
+    _applyLottieAndroid(
+      lottiePath: lottie,
+    );
+  }
+
+  _createBackground(
+    colorString: color,
+    darkColorString: darkColor,
+    darkBackgroundImageSource: darkBackgroundImage,
+    backgroundImageSource: backgroundImage,
+    darkBackgroundImageDestination: '${_flavorHelper.androidNightDrawableFolder}background.png',
+    backgroundImageDestination: '${_flavorHelper.androidDrawableFolder}background.png',
   );
 
   _createBackground(
@@ -114,26 +131,14 @@ void _createAndroidSplash({
     darkColorString: darkColor,
     darkBackgroundImageSource: darkBackgroundImage,
     backgroundImageSource: backgroundImage,
-    darkBackgroundImageDestination:
-        '${_flavorHelper.androidNightDrawableFolder}background.png',
-    backgroundImageDestination:
-        '${_flavorHelper.androidDrawableFolder}background.png',
-  );
-
-  _createBackground(
-    colorString: color,
-    darkColorString: darkColor,
-    darkBackgroundImageSource: darkBackgroundImage,
-    backgroundImageSource: backgroundImage,
-    darkBackgroundImageDestination:
-        '${_flavorHelper.androidNightV21DrawableFolder}background.png',
-    backgroundImageDestination:
-        '${_flavorHelper.androidV21DrawableFolder}background.png',
+    darkBackgroundImageDestination: '${_flavorHelper.androidNightV21DrawableFolder}background.png',
+    backgroundImageDestination: '${_flavorHelper.androidV21DrawableFolder}background.png',
   );
 
   print('[Android] Updating launch background(s) with splash image path...');
 
   _applyLaunchBackgroundXml(
+    useLottie: true,
     gravity: gravity,
     launchBackgroundFilePath: _flavorHelper.androidLaunchBackgroundFile,
     showImage: imagePath != null,
@@ -165,8 +170,7 @@ void _createAndroidSplash({
     if (darkColor != null || darkBackgroundImage != null) {
       _applyLaunchBackgroundXml(
         gravity: gravity,
-        launchBackgroundFilePath:
-            _flavorHelper.androidV21LaunchDarkBackgroundFile,
+        launchBackgroundFilePath: _flavorHelper.androidV21LaunchDarkBackgroundFile,
         showImage: imagePath != null,
         showBranding: brandingImagePath != null,
         brandingGravity: brandingGravity,
@@ -209,6 +213,41 @@ void _createAndroidSplash({
   );
 
   _applyOrientation(orientation: screenOrientation);
+}
+
+void _applyLottieAndroid({
+  String? lottiePath,
+}) {
+  final lottieFile = File(lottiePath!);
+  final destination = File(_flavorHelper.androidLottiePath);
+
+  final xmlDestination = File(_flavorHelper.androidLottieXMLPath);
+
+  if (destination.existsSync()) {
+    destination.deleteSync();
+  } else {
+    destination.parent.createSync(recursive: true);
+  }
+  File(lottieFile.path).copySync(_flavorHelper.androidLottiePath);
+
+  if (xmlDestination.existsSync()) {
+    xmlDestination.deleteSync();
+  } else {
+    xmlDestination.createSync(recursive: true);
+  }
+}
+
+void _deleteLottieAndroid() {
+  final jsonFile = File(_flavorHelper.androidLottiePath);
+  final xmlFile = File(_flavorHelper.androidLottieXMLPath);
+
+  if (jsonFile.existsSync()) {
+    jsonFile.deleteSync();
+  }
+
+  if (xmlFile.existsSync()) {
+    xmlFile.deleteSync();
+  }
 }
 
 /// Create splash screen as drawables for multiple screens (dpi)
@@ -308,34 +347,52 @@ void _applyLaunchBackgroundXml({
   required String launchBackgroundFilePath,
   required String gravity,
   required bool showImage,
+  bool useLottie = false,
+  int? lottieWidth,
+  int? lottieHeight,
   bool showBranding = false,
   String? brandingBottomPadding,
   String brandingGravity = 'bottom',
 }) {
+  lottieHeight ??= 64;
+  lottieWidth ??= 64;
+
   String brandingGravityValue = brandingGravity;
   print('[Android]  - $launchBackgroundFilePath');
   final launchBackgroundFile = File(launchBackgroundFilePath);
   launchBackgroundFile.createSync(recursive: true);
-  final launchBackgroundDocument =
-      XmlDocument.parse(_androidLaunchBackgroundXml);
+  final launchBackgroundDocument = XmlDocument.parse(_androidLaunchBackgroundXml);
 
   final layerList = launchBackgroundDocument.getElement('layer-list');
   final List<XmlNode> items = layerList!.children;
 
-  if (showImage) {
+  if (useLottie) {
+    final launchLottieFile = File(_flavorHelper.androidLottieXMLPath);
+    
+    final lottieName = File(_flavorHelper.androidLottiePath).uri.pathSegments.last.split('.').first;
     final splashItem =
-        XmlDocument.parse(_androidLaunchItemXml).rootElement.copy();
+        XmlDocument.parse(_androidLottieItemXml(height: lottieHeight, width: lottieWidth, name: lottieName))
+            .rootElement
+            .copy();
+
+    splashItem.getElement('com.airbnb.lottie.LottieAnimationView')?.setAttribute('android:layout_gravity', gravity);
+    items.add(splashItem);
+    launchLottieFile.writeAsStringSync(
+      '${splashItem.toXmlString(pretty: true, indent: '    ')}\n',
+    );
+  }
+
+  if (showImage) {
+    final splashItem = XmlDocument.parse(_androidLaunchItemXml).rootElement.copy();
     splashItem.getElement('bitmap')?.setAttribute('android:gravity', gravity);
     items.add(splashItem);
   }
 
   if (showBranding && gravity != brandingGravityValue) {
     //add branding when splash image and branding image are not at the same position
-    final androidBrandingItemXml = _androidBrandingItemXml.replaceAll(
-        "{bottom_padding}", brandingBottomPadding ?? "0");
+    final androidBrandingItemXml = _androidBrandingItemXml.replaceAll("{bottom_padding}", brandingBottomPadding ?? "0");
     print('[Android] branding bottom padding: ${brandingBottomPadding ?? "0"}');
-    final brandingItem =
-        XmlDocument.parse(androidBrandingItemXml).rootElement.copy();
+    final brandingItem = XmlDocument.parse(androidBrandingItemXml).rootElement.copy();
     if (brandingGravityValue == 'bottomRight') {
       brandingGravityValue = 'bottom|right';
     } else if (brandingGravityValue == 'bottomLeft') {
@@ -346,9 +403,7 @@ void _applyLaunchBackgroundXml({
       );
       brandingGravityValue = 'bottom';
     }
-    brandingItem
-        .getElement('bitmap')
-        ?.setAttribute('android:gravity', brandingGravityValue);
+    brandingItem.getElement('bitmap')?.setAttribute('android:gravity', brandingGravityValue);
     items.add(brandingItem);
   }
 
@@ -411,9 +466,7 @@ Future<void> _updateStylesFile({
   try {
     launchTheme = styles!.singleWhere(
       (element) => element.attributes.any(
-        (attribute) =>
-            attribute.name.toString() == 'name' &&
-            attribute.value == 'LaunchTheme',
+        (attribute) => attribute.name.toString() == 'name' && attribute.value == 'LaunchTheme',
       ),
     );
   } on StateError {
@@ -437,9 +490,7 @@ Future<void> _updateStylesFile({
   );
 
   _replaceElement(
-      launchTheme: launchTheme,
-      name: 'android:windowDrawsSystemBarBackgrounds',
-      value: fullScreen.toString());
+      launchTheme: launchTheme, name: 'android:windowDrawsSystemBarBackgrounds', value: fullScreen.toString());
 
   _replaceElement(
     launchTheme: launchTheme,
@@ -512,8 +563,7 @@ void _replaceElement({
 }) {
   launchTheme.children.removeWhere(
     (element) => element.attributes.any(
-      (attribute) =>
-          attribute.name.toString() == 'name' && attribute.value == name,
+      (attribute) => attribute.name.toString() == 'name' && attribute.value == name,
     ),
   );
 
@@ -529,8 +579,7 @@ void _replaceElement({
 void _removeElement({required XmlElement launchTheme, required String name}) {
   launchTheme.children.removeWhere(
     (element) => element.attributes.any(
-      (attribute) =>
-          attribute.name.toString() == 'name' && attribute.value == name,
+      (attribute) => attribute.name.toString() == 'name' && attribute.value == name,
     ),
   );
 }
@@ -544,8 +593,7 @@ void _applyOrientation({required String? orientation}) {
   final activity = application?.getElement('activity');
   const String attribute = 'android:screenOrientation';
   if (orientation == null) {
-    if (activity?.attributes.any((p0) => p0.name.toString() == attribute) ??
-        false) {
+    if (activity?.attributes.any((p0) => p0.name.toString() == attribute) ?? false) {
       activity?.removeAttribute(attribute);
     } else {
       return;

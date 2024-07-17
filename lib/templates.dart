@@ -8,6 +8,29 @@ const String _androidLaunchItemXml = '''
     </item>
 ''';
 
+String _androidLottieItemXml({required String name, required int width, required int height}) => '''
+    <?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background"
+        android:scaleType="centerCrop"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView"
+        android:layout_width="${width}dp"
+        android:layout_height="${height}dp"
+        app:lottie_rawRes="@raw/$name"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:layout_gravity="center"/>
+</FrameLayout>
+''';
+
 const String _androidBrandingItemXml = '''
     <item android:bottom="{bottom_padding}dp">
         <bitmap android:gravity="center" android:src="@drawable/branding" />
@@ -491,6 +514,28 @@ const String _indexHtmlBrandingPicture = '''
     <source srcset="splash/img/branding-dark-1x.[BRANDINGEXTENSION] 1x, splash/img/branding-dark-2x.[BRANDINGEXTENSION] 2x, splash/img/branding-dark-3x.[BRANDINGEXTENSION] 3x, splash/img/branding-dark-4x.[BRANDINGEXTENSION] 4x" media="(prefers-color-scheme: dark)">
     <img class="[BRANDINGMODE]" aria-hidden="true" src="splash/img/branding-1x.[BRANDINGEXTENSION]" alt=""/>
   </picture>''';
+
+String _webLottieJS(String path) => '''
+ <script id="splash-screen-lottie-import" src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.4/lottie.min.js"></script>
+   <script id="splash-screen-lottie-script">
+    function loadAnimation() {
+      const animationPath = 'assets/logo_animation.json';
+      const animationOptions = {
+        container: document.getElementById('splash'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true, 
+        path: animationPath
+      };  
+      const anim = lottie.loadAnimation(animationOptions);
+    }
+      document.addEventListener('DOMContentLoaded', function() {
+      loadAnimation();
+    });
+  </script>
+''';
+
+const String _indexHtmlLottie = '<div id="splash" class="center" style="width: [WIDTH]px; height: [HEIGHT]px;"></div>';
 
 const String _webJS = '''
   <script id="splash-screen-script">

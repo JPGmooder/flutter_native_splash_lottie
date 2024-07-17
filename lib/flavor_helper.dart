@@ -23,6 +23,22 @@ class _FlavorHelper {
     return _androidResFolder;
   }
 
+  String get androidRawFolder {
+    return '${_androidResFolder}raw/';
+  }
+
+  String get androidLayoutFolder {
+    return '${_androidResFolder}layout/';
+  }
+
+  String get androidLottieXMLPath {
+    return '${androidLayoutFolder}splash.xml';
+  }
+
+  String get androidLottiePath {
+    return '${androidRawFolder}lottie_splash.json';
+  }
+
   String get androidDrawableFolder {
     return '${_androidResFolder}drawable/';
   }

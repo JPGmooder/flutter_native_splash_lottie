@@ -8,6 +8,14 @@ class _WebLaunchImageTemplate {
   _WebLaunchImageTemplate({required this.fileName, required this.pixelDensity});
 }
 
+// Image template
+class _WebLaunchLottieTemplate {
+  final String fileName;
+  final double pixelDensity;
+
+  _WebLaunchLottieTemplate({required this.fileName, required this.pixelDensity});
+}
+
 /// Create Web splash screen
 void _createWebSplash({
   required String? imagePath,
@@ -20,6 +28,9 @@ void _createWebSplash({
   required String brandingMode,
   required String? backgroundImage,
   required String? darkBackgroundImage,
+  required String? lottie,
+  required int? lottieWidth,
+  required int? lottieHeight,
 }) {
   if (!File(_webIndex).existsSync()) {
     print('[Web] $_webIndex not found.  Skipping Web.');
@@ -34,7 +45,8 @@ void _createWebSplash({
       brandingImagePath == null &&
       brandingDarkImagePath == null &&
       backgroundImage == null &&
-      darkBackgroundImage == null) {
+      darkBackgroundImage == null &&
+      lottie == null) {
     Directory splashFolder = Directory(_webSplashFolder);
     if (splashFolder.existsSync()) splashFolder.deleteSync(recursive: true);
     final webIndex = File(_webIndex);
@@ -82,8 +94,7 @@ void _createWebSplash({
       ),
     ],
   );
-  final darkImageExtension =
-      (darkImagePath?.endsWith('.gif') ?? false) ? 'gif' : 'png';
+  final darkImageExtension = (darkImagePath?.endsWith('.gif') ?? false) ? 'gif' : 'png';
   _createWebImages(
     imagePath: darkImagePath,
     webSplashImages: [
@@ -107,8 +118,7 @@ void _createWebSplash({
   );
 
   brandingDarkImagePath ??= brandingImagePath;
-  final brandingExtension =
-      (brandingImagePath?.endsWith('.gif') ?? false) ? 'gif' : 'png';
+  final brandingExtension = (brandingImagePath?.endsWith('.gif') ?? false) ? 'gif' : 'png';
 
   _createWebImages(
     imagePath: brandingImagePath,
@@ -132,8 +142,7 @@ void _createWebSplash({
     ],
   );
 
-  final darkBrandingExtension =
-      (brandingDarkImagePath?.endsWith('.gif') ?? false) ? 'gif' : 'png';
+  final darkBrandingExtension = (brandingDarkImagePath?.endsWith('.gif') ?? false) ? 'gif' : 'png';
   _createWebImages(
     imagePath: brandingDarkImagePath,
     webSplashImages: [
@@ -167,12 +176,15 @@ void _createWebSplash({
     backgroundImage: backgroundImage,
     hasDarkImage: darkBackgroundImage != null,
   );
-  _createSplashJs();
+  _createSplashJs(lottiePath: lottie);
   _updateHtml(
+    lottie: lottie != null,
     imageMode: imageMode,
     imagePath: imagePath,
     brandingMode: brandingMode,
     brandingImagePath: brandingImagePath,
+    lottieHeight: lottieHeight,
+    lottieWidth: lottieWidth,
   );
 }
 
@@ -182,15 +194,13 @@ void _createBackgroundImages({
 }) {
   print('[Web] Creating background images');
 
-  final bgExtension =
-      (backgroundImage?.endsWith('.gif') ?? false) ? 'gif' : 'png';
+  final bgExtension = (backgroundImage?.endsWith('.gif') ?? false) ? 'gif' : 'png';
   _createBackgroundImage(
     backgroundImage: backgroundImage,
     fileName: "light-background.$bgExtension",
   );
 
-  final darkBgExtension =
-      (darkBackgroundImage?.endsWith('.gif') ?? false) ? 'gif' : 'png';
+  final darkBgExtension = (darkBackgroundImage?.endsWith('.gif') ?? false) ? 'gif' : 'png';
   _createBackgroundImage(
     backgroundImage: darkBackgroundImage,
     fileName: "dark-background.$darkBgExtension",
@@ -286,8 +296,7 @@ void _createSplashCss({
   if (darkBackgroundImage == null) {
     cssContent = cssContent.replaceFirst('    [DARKBACKGROUNDIMAGE]\n', '');
   } else {
-    final darkBgExtension =
-        darkBackgroundImage.endsWith('.gif') ? 'gif' : 'png';
+    final darkBgExtension = darkBackgroundImage.endsWith('.gif') ? 'gif' : 'png';
 
     cssContent = cssContent.replaceFirst(
       '[DARKBACKGROUNDIMAGE]',
@@ -312,17 +321,29 @@ void _createSplashCss({
   webIndex.writeAsStringSync(document.outerHtml);
 }
 
-void _createSplashJs() {
+void _createSplashJs({
+  required String? lottiePath,
+}) {
   // Add js as an inline script in head tag
   final webIndex = File(_webIndex);
   final document = html_parser.parse(webIndex.readAsStringSync());
 
   // Update splash js script tag
-  document.head
-    ?..querySelector('script#splash-screen-script')?.remove()
-    ..append(
-      html_parser.parseFragment(_webJS, container: ''),
+  document.head?.querySelector('script#splash-screen-script')?.remove();
+  document.head?.querySelector('script#splash-screen-lottie-import')?.remove();
+  document.head?.querySelector('script#splash-screen-lottie-script')?.remove();
+
+  if (lottiePath != null) {
+    document.head?.append(
+      html_parser.parseFragment(
+        _webLottieJS(lottiePath),
+      ),
     );
+  }
+
+  document.head?.append(
+    html_parser.parseFragment(_webJS, container: ''),
+  );
 
   // Write the updated index.html
   webIndex.writeAsStringSync(document.outerHtml);
@@ -333,7 +354,13 @@ void _updateHtml({
   required String? imagePath,
   required String brandingMode,
   required String? brandingImagePath,
+  int? lottieWidth,
+  int? lottieHeight,
+  bool lottie = false,
 }) {
+  lottieWidth ??= 64;
+  lottieHeight ??= 64;
+  
   print('[Web] Updating index.html');
   final webIndex = File(_webIndex);
   final document = html_parser.parse(webIndex.readAsStringSync());
@@ -362,6 +389,20 @@ void _updateHtml({
         'script[src="splash/splash.js"]',
       )
       ?.remove();
+
+  if (lottie) {
+    document.querySelector('picture#splash')?.remove();
+    document.querySelector('div#splash')?.remove();
+    document.body?.insertBefore(
+      html_parser.parseFragment(
+        '\n${_indexHtmlLottie.replaceAll('[WIDTH]', lottieHeight.toString()).replaceAll('[HEIGHT]', lottieHeight.toString())}',
+        container: '',
+      ),
+      document.body?.firstChild,
+    );
+    webIndex.writeAsStringSync(document.outerHtml);
+    return;
+  }
 
   // Update splash image
   document.querySelector('picture#splash')?.remove();

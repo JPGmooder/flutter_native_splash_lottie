@@ -3,7 +3,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding, lottie: true);
   runApp(const MyApp());
 }
 
@@ -82,6 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // the splash screen is displayed.  Remove the following example because
     // delaying the user experience is a bad design practice!
     // ignore_for_file: avoid_print
+
     print('ready in 3...');
     await Future.delayed(const Duration(seconds: 1));
     print('ready in 2...');
@@ -89,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print('ready in 1...');
     await Future.delayed(const Duration(seconds: 1));
     print('go!');
-   // FlutterNativeSplash.remove();
+    FlutterNativeSplash.remove();
   }
 
   @override

@@ -46,84 +46,74 @@ void createSplash({
 /// Create splash screens for Android and iOS based on a config argument
 void _createSplashByConfig(Map<String, dynamic> config) {
   // Preparing all the data for later usage
-  final String? image =
-      _checkImageExists(config: config, parameter: _Parameter.image);
-  final String? imageAndroid =
-      _checkImageExists(config: config, parameter: _Parameter.imageAndroid);
-  final String? imageIos =
-      _checkImageExists(config: config, parameter: _Parameter.imageIos);
-  final String? imageWeb =
-      _checkImageExists(config: config, parameter: _Parameter.imageWeb);
-  final String? darkImage =
-      _checkImageExists(config: config, parameter: _Parameter.darkImage);
-  final String? darkImageAndroid =
-      _checkImageExists(config: config, parameter: _Parameter.darkImageAndroid);
-  final String? darkImageIos =
-      _checkImageExists(config: config, parameter: _Parameter.darkImageIos);
-  final String? darkImageWeb =
-      _checkImageExists(config: config, parameter: _Parameter.darkImageWeb);
-  final String? brandingImage =
-      _checkImageExists(config: config, parameter: _Parameter.brandingImage);
-  final String? brandingBottomPadding =
-      config[_Parameter.brandingBottomPadding]?.toString();
-  final String? brandingImageAndroid = _checkImageExists(
-      config: config, parameter: _Parameter.brandingImageAndroid);
-  final String? brandingBottomPaddingAndroid =
-      config[_Parameter.brandingBottomPaddingAndroid]?.toString();
-  final String? brandingImageIos =
-      _checkImageExists(config: config, parameter: _Parameter.brandingImageIos);
-  final String? brandingBottomPaddingIos =
-      config[_Parameter.brandingBottomPaddingIos]?.toString();
-  final String? brandingImageWeb =
-      _checkImageExists(config: config, parameter: _Parameter.brandingImageWeb);
-  final String? brandingDarkImage = _checkImageExists(
-      config: config, parameter: _Parameter.brandingDarkImage);
-  final String? brandingDarkImageAndroid = _checkImageExists(
-      config: config, parameter: _Parameter.brandingDarkImageAndroid);
-  final String? brandingDarkImageIos = _checkImageExists(
-      config: config, parameter: _Parameter.brandingDarkImageIos);
-  final String? brandingDarkImageWeb = _checkImageExists(
-      config: config, parameter: _Parameter.brandingDarkImageWeb);
+  final String? lottie = _checkLottieExists(config: config, parameter: _Parameter.lottie);
+  final int? lottieHeight = _checkLottieSize(config: config, parameter: _Parameter.lottieHeight);
+  final int? lottieWidth = _checkLottieSize(config: config, parameter: _Parameter.lottieWidth);
+
+  final String? lottieAndroid = _checkLottieExists(config: config, parameter: _Parameter.lottieAndroid);
+  final int? lottieAndroidHeight = _checkLottieSize(config: config, parameter: _Parameter.lottieAndroidHeight);
+  final int? lottieAndroidWidth = _checkLottieSize(config: config, parameter: _Parameter.lottieAndroidWidth);
+
+  final String? lottieIos = _checkLottieExists(config: config, parameter: _Parameter.lottieIos);
+  final int? lottieIosHeight = _checkLottieSize(config: config, parameter: _Parameter.lottieIosHeight);
+  final int? lottieIosWidth = _checkLottieSize(config: config, parameter: _Parameter.lottieIosWidth);
+
+  final String? lottieWeb = _checkLottieExists(config: config, parameter: _Parameter.lottieWeb);
+  final int? lottieWebHeight = _checkLottieSize(config: config, parameter: _Parameter.lottieWebHeight);
+  final int? lottieWebWidth = _checkLottieSize(config: config, parameter: _Parameter.lottieWebWidth);
+
+  final String? image = _checkImageExists(config: config, parameter: _Parameter.image);
+  final String? imageAndroid = _checkImageExists(config: config, parameter: _Parameter.imageAndroid);
+  final String? imageIos = _checkImageExists(config: config, parameter: _Parameter.imageIos);
+  final String? imageWeb = _checkImageExists(config: config, parameter: _Parameter.imageWeb);
+  final String? darkImage = _checkImageExists(config: config, parameter: _Parameter.darkImage);
+  final String? darkImageAndroid = _checkImageExists(config: config, parameter: _Parameter.darkImageAndroid);
+  final String? darkImageIos = _checkImageExists(config: config, parameter: _Parameter.darkImageIos);
+  final String? darkImageWeb = _checkImageExists(config: config, parameter: _Parameter.darkImageWeb);
+  final String? brandingImage = _checkImageExists(config: config, parameter: _Parameter.brandingImage);
+  final String? brandingBottomPadding = config[_Parameter.brandingBottomPadding]?.toString();
+  final String? brandingImageAndroid = _checkImageExists(config: config, parameter: _Parameter.brandingImageAndroid);
+  final String? brandingBottomPaddingAndroid = config[_Parameter.brandingBottomPaddingAndroid]?.toString();
+  final String? brandingImageIos = _checkImageExists(config: config, parameter: _Parameter.brandingImageIos);
+  final String? brandingBottomPaddingIos = config[_Parameter.brandingBottomPaddingIos]?.toString();
+  final String? brandingImageWeb = _checkImageExists(config: config, parameter: _Parameter.brandingImageWeb);
+  final String? brandingDarkImage = _checkImageExists(config: config, parameter: _Parameter.brandingDarkImage);
+  final String? brandingDarkImageAndroid =
+      _checkImageExists(config: config, parameter: _Parameter.brandingDarkImageAndroid);
+  final String? brandingDarkImageIos = _checkImageExists(config: config, parameter: _Parameter.brandingDarkImageIos);
+  final String? brandingDarkImageWeb = _checkImageExists(config: config, parameter: _Parameter.brandingDarkImageWeb);
   final String? color = parseColor(config[_Parameter.color]);
   final String? colorAndroid = parseColor(config[_Parameter.colorAndroid]);
   final String? colorIos = parseColor(config[_Parameter.colorIos]);
   final String? colorWeb = parseColor(config[_Parameter.colorWeb]);
   final String? darkColor = parseColor(config[_Parameter.darkColor]);
-  final String? darkColorAndroid =
-      parseColor(config[_Parameter.darkColorAndroid]);
+  final String? darkColorAndroid = parseColor(config[_Parameter.darkColorAndroid]);
   final String? darkColorIos = parseColor(config[_Parameter.darkColorIos]);
   final String? darkColorWeb = parseColor(config[_Parameter.darkColorWeb]);
-  final String? backgroundImage =
-      _checkImageExists(config: config, parameter: _Parameter.backgroundImage);
-  final String? backgroundImageAndroid = _checkImageExists(
-      config: config, parameter: _Parameter.backgroundImageAndroid);
-  final String? backgroundImageIos = _checkImageExists(
-      config: config, parameter: _Parameter.backgroundImageIos);
-  final String? backgroundImageWeb = _checkImageExists(
-      config: config, parameter: _Parameter.backgroundImageWeb);
-  final String? darkBackgroundImage = _checkImageExists(
-      config: config, parameter: _Parameter.darkBackgroundImage);
+  final String? backgroundImage = _checkImageExists(config: config, parameter: _Parameter.backgroundImage);
+  final String? backgroundImageAndroid =
+      _checkImageExists(config: config, parameter: _Parameter.backgroundImageAndroid);
+  final String? backgroundImageIos = _checkImageExists(config: config, parameter: _Parameter.backgroundImageIos);
+  final String? backgroundImageWeb = _checkImageExists(config: config, parameter: _Parameter.backgroundImageWeb);
+  final String? darkBackgroundImage = _checkImageExists(config: config, parameter: _Parameter.darkBackgroundImage);
   final String? darkBackgroundImageAndroid = _checkImageExists(
     config: config,
     parameter: _Parameter.darkBackgroundImageAndroid,
   );
-  final String? darkBackgroundImageIos = _checkImageExists(
-      config: config, parameter: _Parameter.darkBackgroundImageIos);
-  final String? darkBackgroundImageWeb = _checkImageExists(
-      config: config, parameter: _Parameter.darkBackgroundImageWeb);
+  final String? darkBackgroundImageIos =
+      _checkImageExists(config: config, parameter: _Parameter.darkBackgroundImageIos);
+  final String? darkBackgroundImageWeb =
+      _checkImageExists(config: config, parameter: _Parameter.darkBackgroundImageWeb);
 
   final plistFiles = config[_Parameter.plistFiles] as List<String>?;
   String gravity = (config['fill'] as bool? ?? false) ? 'fill' : 'center';
   if (config[_Parameter.gravity] != null) {
     gravity = config[_Parameter.gravity] as String;
   }
-  final String? androidScreenOrientation =
-      config[_Parameter.androidScreenOrientation] as String?;
-  final brandingGravity =
-      config[_Parameter.brandingGravity] as String? ?? 'bottom';
+  final String? androidScreenOrientation = config[_Parameter.androidScreenOrientation] as String?;
+  final brandingGravity = config[_Parameter.brandingGravity] as String? ?? 'bottom';
   final bool fullscreen = config[_Parameter.fullscreen] as bool? ?? false;
-  final String iosContentMode =
-      config[_Parameter.iosContentMode] as String? ?? 'center';
+  final String iosContentMode = config[_Parameter.iosContentMode] as String? ?? 'center';
   final webImageMode = config[_Parameter.webImageMode] as String? ?? 'center';
   String? android12Image;
   String? android12DarkImage;
@@ -135,34 +125,25 @@ void _createSplashByConfig(Map<String, dynamic> config) {
   String? android12DarkBrandingImage;
 
   if (config[_Parameter.android12Section] != null) {
-    final android12Config =
-        config[_Parameter.android12Section] as Map<String, dynamic>;
-    android12Image =
-        _checkImageExists(config: android12Config, parameter: _Parameter.image);
-    android12DarkImage = _checkImageExists(
-        config: android12Config, parameter: _Parameter.darkImage);
-    android12IconBackgroundColor =
-        parseColor(android12Config[_Parameter.iconBackgroundColor]);
-    darkAndroid12IconBackgroundColor =
-        parseColor(android12Config[_Parameter.iconBackgroundColorDark]);
+    final android12Config = config[_Parameter.android12Section] as Map<String, dynamic>;
+    android12Image = _checkImageExists(config: android12Config, parameter: _Parameter.image);
+    android12DarkImage = _checkImageExists(config: android12Config, parameter: _Parameter.darkImage);
+    android12IconBackgroundColor = parseColor(android12Config[_Parameter.iconBackgroundColor]);
+    darkAndroid12IconBackgroundColor = parseColor(android12Config[_Parameter.iconBackgroundColorDark]);
     android12Color = parseColor(android12Config[_Parameter.color]) ?? color;
-    android12DarkColor =
-        parseColor(android12Config[_Parameter.darkColor]) ?? darkColor;
-    android12BrandingImage = _checkImageExists(
-        config: android12Config, parameter: _Parameter.brandingImage);
-    android12DarkBrandingImage = _checkImageExists(
-        config: android12Config, parameter: _Parameter.brandingDarkImage);
+    android12DarkColor = parseColor(android12Config[_Parameter.darkColor]) ?? darkColor;
+    android12BrandingImage = _checkImageExists(config: android12Config, parameter: _Parameter.brandingImage);
+    android12DarkBrandingImage = _checkImageExists(config: android12Config, parameter: _Parameter.brandingDarkImage);
   }
 
-  if (!config.containsKey(_Parameter.android) ||
-      config[_Parameter.android] as bool) {
+  if (!config.containsKey(_Parameter.android) || config[_Parameter.android] as bool) {
     if (Directory('android').existsSync()) {
       _createAndroidSplash(
+        lottie: lottieAndroid ?? lottie,
         imagePath: imageAndroid ?? image,
         darkImagePath: darkImageAndroid ?? darkImage,
         brandingImagePath: brandingImageAndroid ?? brandingImage,
-        brandingBottomPadding:
-            brandingBottomPaddingAndroid ?? brandingBottomPadding,
+        brandingBottomPadding: brandingBottomPaddingAndroid ?? brandingBottomPadding,
         brandingDarkImagePath: brandingDarkImageAndroid ?? brandingDarkImage,
         backgroundImage: backgroundImageAndroid ?? backgroundImage,
         darkBackgroundImage: darkBackgroundImageAndroid ?? darkBackgroundImage,
@@ -177,11 +158,9 @@ void _createSplashByConfig(Map<String, dynamic> config) {
         android12BackgroundColor: android12Color,
         android12DarkBackgroundColor: android12DarkColor ?? android12Color,
         android12IconBackgroundColor: android12IconBackgroundColor,
-        darkAndroid12IconBackgroundColor:
-            darkAndroid12IconBackgroundColor ?? android12IconBackgroundColor,
+        darkAndroid12IconBackgroundColor: darkAndroid12IconBackgroundColor ?? android12IconBackgroundColor,
         android12BrandingImagePath: android12BrandingImage,
-        android12DarkBrandingImagePath:
-            android12DarkBrandingImage ?? android12BrandingImage,
+        android12DarkBrandingImagePath: android12DarkBrandingImage ?? android12BrandingImage,
       );
     } else {
       print('Android folder not found, skipping Android splash update...');
@@ -191,14 +170,14 @@ void _createSplashByConfig(Map<String, dynamic> config) {
   if (!config.containsKey(_Parameter.ios) || config[_Parameter.ios] as bool) {
     if (Directory('ios').existsSync()) {
       _createiOSSplash(
+        lottie: lottieIos ?? lottie,
         imagePath: imageIos ?? image,
         darkImagePath: darkImageIos ?? darkImage,
         backgroundImage: backgroundImageIos ?? backgroundImage,
         darkBackgroundImage: darkBackgroundImageIos ?? darkBackgroundImage,
         brandingImagePath: brandingImageIos ?? brandingImage,
         brandingDarkImagePath: brandingDarkImageIos ?? brandingDarkImage,
-        brandingBottomPadding:
-            brandingBottomPaddingIos ?? brandingBottomPadding,
+        brandingBottomPadding: brandingBottomPaddingIos ?? brandingBottomPadding,
         color: colorIos ?? color,
         darkColor: darkColorIos ?? darkColor,
         plistFiles: plistFiles,
@@ -214,6 +193,9 @@ void _createSplashByConfig(Map<String, dynamic> config) {
   if (!config.containsKey(_Parameter.web) || config[_Parameter.web] as bool) {
     if (Directory('web').existsSync()) {
       _createWebSplash(
+        lottie: lottieWeb ?? lottie,
+        lottieHeight: lottieWebHeight ?? lottieHeight,
+        lottieWidth: lottieWebWidth ?? lottieWidth,
         imagePath: imageWeb ?? image,
         darkImagePath: darkImageWeb ?? darkImage,
         backgroundImage: backgroundImageWeb ?? backgroundImage,
@@ -249,10 +231,7 @@ void removeSplash({
   print("Restoring Flutter's default native splash screen...");
   final config = getConfig(configFile: path, flavor: flavor);
 
-  final removeConfig = <String, dynamic>{
-    _Parameter.color: '#ffffff',
-    _Parameter.darkColor: '#000000'
-  };
+  final removeConfig = <String, dynamic>{_Parameter.color: '#ffffff', _Parameter.darkColor: '#000000'};
 
   if (config.containsKey(_Parameter.android)) {
     removeConfig[_Parameter.android] = config[_Parameter.android];
@@ -297,8 +276,7 @@ String? _checkImageExists({
       "bmp", "dib", // BMP
     ];
 
-    if (!supportedFormats
-        .any((format) => p.extension(image).toLowerCase() == ".$format")) {
+    if (!supportedFormats.any((format) => p.extension(image).toLowerCase() == ".$format")) {
       print(
         'Unsupported file format: $image  Your image must be in one of the following formats: $supportedFormats',
       );
@@ -307,6 +285,51 @@ String? _checkImageExists({
   }
 
   return image == '' ? null : image;
+}
+
+String? _checkLottieExists({
+  required Map<String, dynamic> config,
+  required String parameter,
+}) {
+  final String? lottie = config[parameter]?.toString();
+  if (lottie != null) {
+    if (lottie.isNotEmpty && !File(lottie).existsSync()) {
+      print(
+        'The file "$lottie" set as the parameter "$parameter" was not found.',
+      );
+      exit(1);
+    }
+
+    // https://github.com/brendan-duncan/image#supported-image-formats
+    final List<String> supportedFormats = ["json"];
+
+    if (!supportedFormats.any((format) => p.extension(lottie).toLowerCase() == ".$format")) {
+      print(
+        'Unsupported file format: $lottie  Your image must be in one of the following formats: $supportedFormats',
+      );
+      exit(1);
+    }
+  }
+
+  return lottie == '' ? null : lottie;
+}
+
+int? _checkLottieSize({
+  required Map<String, dynamic> config,
+  required String parameter,
+}) {
+  final String? lottieSize = config[parameter]?.toString();
+  final parsedLottie = int.tryParse(lottieSize ?? '');
+  if (lottieSize != null) {
+    if (lottieSize.isNotEmpty && parsedLottie == null) {
+      print(
+        'The lottie size param has errored value $parsedLottie. Consider using only digits over 0',
+      );
+      exit(1);
+    }
+  }
+
+  return parsedLottie;
 }
 
 void createBackgroundImage({
@@ -460,6 +483,22 @@ class _Parameter {
   static const imageAndroid = 'image_android';
   static const imageIos = 'image_ios';
   static const imageWeb = 'image_web';
+  static const lottie = 'lottie';
+  static const lottieHeight = 'lottie_height';
+  static const lottieWidth = 'lottie_width';
+
+  static const lottieWeb = 'lottie_web';
+  static const lottieWebHeight = 'lottie_web_height';
+  static const lottieWebWidth = 'lottie_web_width';
+
+  static const lottieAndroid = 'lottie_android';
+  static const lottieAndroidHeight = 'lottie_android_height';
+  static const lottieAndroidWidth = 'lottie_android_width';
+
+  static const lottieIos = 'lottie_ios';
+  static const lottieIosHeight = 'lottie_ios_height';
+  static const lottieIosWidth = 'lottie_ios_width';
+
   static const ios = 'ios';
   static const iosContentMode = 'ios_content_mode';
   static const plistFiles = 'info_plist_files';
@@ -467,6 +506,19 @@ class _Parameter {
   static const webImageMode = 'web_image_mode';
 
   static List<String> all = [
+    lottie,
+    lottieHeight,
+    lottieWidth,
+    lottieIosWidth,
+    lottieAndroid,
+    lottieAndroidHeight,
+    lottieAndroidWidth,
+    lottieIos,
+    lottieIosHeight,
+    lottieIosWidth,
+    lottieWeb,
+    lottieWebHeight,
+    lottieWebWidth,
     android,
     android12Section,
     androidScreenOrientation,

@@ -7,7 +7,6 @@
 library flutter_native_splash;
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -40,25 +39,17 @@ class FlutterNativeSplash {
   static WidgetsBinding? _widgetsBinding;
 
   // Prevents app from closing splash screen, app layout will be build but not displayed.
-  static void preserve({required WidgetsBinding widgetsBinding}) {
+  static void preserve({required WidgetsBinding widgetsBinding, bool lottie = false}) async {
     _widgetsBinding = widgetsBinding;
+    if (lottie) {
+      await _channel.invokeMethod('preserve');
+    }
     _widgetsBinding?.deferFirstFrame();
   }
 
-  static void remove() {
+  static void remove() async {
     _widgetsBinding?.allowFirstFrame();
+    await _channel.invokeMethod('remove');
     _widgetsBinding = null;
-    if (kIsWeb) {
-      // Use SchedulerBinding to avoid white flash on splash removal.
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        try {
-          _channel.invokeMethod('remove');
-        } catch (e) {
-          throw Exception(
-            '$e\nDid you forget to run "dart run flutter_native_splash:create"?',
-          );
-        }
-      });
-    }
   }
 }

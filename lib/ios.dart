@@ -52,6 +52,7 @@ final List<_IosLaunchImageTemplate> _iOSBrandingImagesDark =
 
 /// Create iOS splash screen
 void _createiOSSplash({
+  required String? lottie,
   required String? imagePath,
   required String? darkImagePath,
   String? brandingImagePath,
