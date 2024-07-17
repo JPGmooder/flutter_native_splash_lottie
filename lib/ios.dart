@@ -193,7 +193,7 @@ void _applyLottieiOS({
 
   configContentsFile.parent.createSync(recursive: true);
   configFile.writeAsStringSync(_iosLottieConfigurationJson(height: lottieHeight, width: lottieWidth));
-  
+
   contentsFile.writeAsStringSync(_iosLottieContentsJson);
   configContentsFile.writeAsStringSync(_iosLottieConfigContentsJson);
 }
@@ -223,7 +223,7 @@ void _applyImageiOS({
   // That's why this was added, as a setup for a default value.
   targetPath ??= _flavorHelper.iOSAssetsLaunchImageFolder;
 
-  print('[iOS] Creating ${dark ? 'dark mode ' : ''} images');
+  print('[iOS] Creating ${dark ? 'dark mode ' : ''}images');
 
   final image = decodeImage(File(imagePath).readAsBytesSync());
   if (image == null) {

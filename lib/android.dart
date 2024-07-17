@@ -222,6 +222,8 @@ void _createAndroidSplash({
 void _applyLottieAndroid({
   String? lottiePath,
 }) {
+  print('[Android] Creating lottie');
+
   final lottieFile = File(lottiePath!);
   final destination = File(_flavorHelper.androidLottiePath);
 

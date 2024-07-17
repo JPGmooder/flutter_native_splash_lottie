@@ -334,6 +334,7 @@ void _createSplashJs({
   document.head?.querySelector('script#splash-screen-lottie-script')?.remove();
 
   if (lottiePath != null) {
+    print('[Web] Creating lottie');
     document.head?.append(
       html_parser.parseFragment(
         _webLottieJS(lottiePath),
@@ -360,7 +361,7 @@ void _updateHtml({
 }) {
   lottieWidth ??= 64;
   lottieHeight ??= 64;
-  
+
   print('[Web] Updating index.html');
   final webIndex = File(_webIndex);
   final document = html_parser.parse(webIndex.readAsStringSync());

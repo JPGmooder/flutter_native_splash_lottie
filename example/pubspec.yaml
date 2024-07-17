@@ -94,9 +94,12 @@ flutter:
 flutter_native_splash:
   color: "#FFFFFF"
   color_dark: "#1F1F1F"
+  image: 'assets/logo.png'
   lottie: 'assets/logo_animation.json'
   lottie_width: 120
   lottie_height: 120
+  android_12:
+    image: 'assets/logo.png'
 
   android: true
   ios: true
