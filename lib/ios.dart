@@ -8,8 +8,7 @@ class _IosLaunchImageTemplate {
   _IosLaunchImageTemplate({required this.fileName, required this.pixelDensity});
 }
 
-final List<_IosLaunchImageTemplate> _iOSSplashImages =
-    <_IosLaunchImageTemplate>[
+final List<_IosLaunchImageTemplate> _iOSSplashImages = <_IosLaunchImageTemplate>[
   _IosLaunchImageTemplate(fileName: 'LaunchImage.png', pixelDensity: 1),
   _IosLaunchImageTemplate(fileName: 'LaunchImage@2x.png', pixelDensity: 2),
   _IosLaunchImageTemplate(
@@ -18,8 +17,7 @@ final List<_IosLaunchImageTemplate> _iOSSplashImages =
   ), // original image must be @4x
 ];
 
-final List<_IosLaunchImageTemplate> _iOSSplashImagesDark =
-    <_IosLaunchImageTemplate>[
+final List<_IosLaunchImageTemplate> _iOSSplashImagesDark = <_IosLaunchImageTemplate>[
   _IosLaunchImageTemplate(fileName: 'LaunchImageDark.png', pixelDensity: 1),
   _IosLaunchImageTemplate(fileName: 'LaunchImageDark@2x.png', pixelDensity: 2),
   _IosLaunchImageTemplate(fileName: 'LaunchImageDark@3x.png', pixelDensity: 3),
@@ -27,8 +25,7 @@ final List<_IosLaunchImageTemplate> _iOSSplashImagesDark =
 ];
 
 //Resource files for branding assets
-final List<_IosLaunchImageTemplate> _iOSBrandingImages =
-    <_IosLaunchImageTemplate>[
+final List<_IosLaunchImageTemplate> _iOSBrandingImages = <_IosLaunchImageTemplate>[
   _IosLaunchImageTemplate(fileName: 'BrandingImage.png', pixelDensity: 1),
   _IosLaunchImageTemplate(fileName: 'BrandingImage@2x.png', pixelDensity: 2),
   _IosLaunchImageTemplate(
@@ -36,8 +33,7 @@ final List<_IosLaunchImageTemplate> _iOSBrandingImages =
     pixelDensity: 3,
   ), // original image must be @4x
 ];
-final List<_IosLaunchImageTemplate> _iOSBrandingImagesDark =
-    <_IosLaunchImageTemplate>[
+final List<_IosLaunchImageTemplate> _iOSBrandingImagesDark = <_IosLaunchImageTemplate>[
   _IosLaunchImageTemplate(fileName: 'BrandingImageDark.png', pixelDensity: 1),
   _IosLaunchImageTemplate(
     fileName: 'BrandingImageDark@2x.png',
@@ -53,6 +49,8 @@ final List<_IosLaunchImageTemplate> _iOSBrandingImagesDark =
 /// Create iOS splash screen
 void _createiOSSplash({
   required String? lottie,
+  int? lottieWidth,
+  int? lottieHeight,
   required String? imagePath,
   required String? darkImagePath,
   String? brandingImagePath,
@@ -67,13 +65,18 @@ void _createiOSSplash({
   required String? backgroundImage,
   required String? darkBackgroundImage,
 }) {
+  if (lottie != null) {
+    _applyLottieiOS(lottiePath: lottie);
+  } else {
+    _deleteLottieIos();
+  }
+
   if (imagePath != null) {
     _applyImageiOS(imagePath: imagePath, list: _iOSSplashImages);
   } else {
     final splashImage = Image(width: 1, height: 1);
     for (final template in _iOSSplashImages) {
-      final file =
-          File(_flavorHelper.iOSAssetsLaunchImageFolder + template.fileName);
+      final file = File(_flavorHelper.iOSAssetsLaunchImageFolder + template.fileName);
       file.createSync(recursive: true);
       file.writeAsBytesSync(encodePng(splashImage));
     }
@@ -87,8 +90,7 @@ void _createiOSSplash({
     );
   } else {
     for (final template in _iOSSplashImagesDark) {
-      final file =
-          File(_flavorHelper.iOSAssetsLaunchImageFolder + template.fileName);
+      final file = File(_flavorHelper.iOSAssetsLaunchImageFolder + template.fileName);
       if (file.existsSync()) file.deleteSync();
     }
   }
@@ -101,8 +103,7 @@ void _createiOSSplash({
     );
   } else {
     if (Directory(_flavorHelper.iOSAssetsBrandingImageFolder).existsSync()) {
-      Directory(_flavorHelper.iOSAssetsBrandingImageFolder)
-          .delete(recursive: true);
+      Directory(_flavorHelper.iOSAssetsBrandingImageFolder).delete(recursive: true);
     }
   }
   if (brandingDarkImagePath != null) {
@@ -114,27 +115,22 @@ void _createiOSSplash({
     );
   } else {
     for (final template in _iOSBrandingImagesDark) {
-      final file =
-          File(_flavorHelper.iOSAssetsBrandingImageFolder + template.fileName);
+      final file = File(_flavorHelper.iOSAssetsBrandingImageFolder + template.fileName);
       if (file.existsSync()) file.deleteSync();
     }
   }
 
-  final launchImageFile =
-      File('${_flavorHelper.iOSAssetsLaunchImageFolder}Contents.json');
+  final launchImageFile = File('${_flavorHelper.iOSAssetsLaunchImageFolder}Contents.json');
   launchImageFile.createSync(recursive: true);
   launchImageFile.writeAsStringSync(
     darkImagePath != null ? _iOSContentsJsonDark : _iOSContentsJson,
   );
 
   if (brandingImagePath != null) {
-    final brandingImageFile =
-        File('${_flavorHelper.iOSAssetsBrandingImageFolder}Contents.json');
+    final brandingImageFile = File('${_flavorHelper.iOSAssetsBrandingImageFolder}Contents.json');
     brandingImageFile.createSync(recursive: true);
     brandingImageFile.writeAsStringSync(
-      brandingDarkImagePath != null
-          ? _iOSBrandingContentsJsonDark
-          : _iOSBrandingContentsJson,
+      brandingDarkImagePath != null ? _iOSBrandingContentsJsonDark : _iOSBrandingContentsJson,
     );
   }
 
@@ -150,10 +146,8 @@ void _createiOSSplash({
     darkColorString: darkColor,
     darkBackgroundImageSource: darkBackgroundImage,
     backgroundImageSource: backgroundImage,
-    darkBackgroundImageDestination:
-        '${_flavorHelper.iOSAssetsLaunchImageBackgroundFolder}darkbackground.png',
-    backgroundImageDestination:
-        '${_flavorHelper.iOSAssetsLaunchImageBackgroundFolder}background.png',
+    darkBackgroundImageDestination: '${_flavorHelper.iOSAssetsLaunchImageBackgroundFolder}darkbackground.png',
+    backgroundImageDestination: '${_flavorHelper.iOSAssetsLaunchImageBackgroundFolder}background.png',
   );
 
   final backgroundImageFile = File(
@@ -162,12 +156,60 @@ void _createiOSSplash({
   backgroundImageFile.createSync(recursive: true);
 
   backgroundImageFile.writeAsStringSync(
-    (darkColor != null || darkBackgroundImage != null)
-        ? _iOSLaunchBackgroundDarkJson
-        : _iOSLaunchBackgroundJson,
+    (darkColor != null || darkBackgroundImage != null) ? _iOSLaunchBackgroundDarkJson : _iOSLaunchBackgroundJson,
   );
 
   _applyInfoPList(plistFiles: plistFiles, fullscreen: fullscreen);
+}
+
+/// Create splash screen images for original size, @2x and @3x
+void _applyLottieiOS({
+  required String lottiePath,
+  int? lottieHeight,
+  int? lottieWidth,
+}) async {
+  lottieHeight ??= 64;
+  lottieWidth ??= 64;
+
+  print('[iOS] Creating lottie');
+
+  final lottieFile = File(lottiePath);
+
+  final contentsFile = File(_flavorHelper.iosLottieContentsPath);
+
+  final configFile = File(_flavorHelper.iosLottieConfigPath);
+
+  final configContentsFile = File(_flavorHelper.iosLottieConfigContentsPath);
+
+  final destination = File(_flavorHelper.iosLottiePath);
+
+  if (destination.existsSync()) {
+    destination.deleteSync();
+  } else {
+    destination.parent.createSync(recursive: true);
+  }
+
+  lottieFile.copySync(destination.path);
+
+  configContentsFile.parent.createSync(recursive: true);
+  configFile.writeAsStringSync(_iosLottieConfigurationJson(height: lottieHeight, width: lottieWidth));
+  
+  contentsFile.writeAsStringSync(_iosLottieContentsJson);
+  configContentsFile.writeAsStringSync(_iosLottieConfigContentsJson);
+}
+
+void _deleteLottieIos() {
+  final contentsFile = File(_flavorHelper.iosLottieContentsPath);
+
+  if (contentsFile.parent.existsSync()) {
+    contentsFile.parent.deleteSync(recursive: true);
+  }
+
+  final configContentsFile = File(_flavorHelper.iosLottieConfigContentsPath);
+
+  if (configContentsFile.parent.existsSync()) {
+    configContentsFile.parent.deleteSync(recursive: true);
+  }
 }
 
 /// Create splash screen images for original size, @2x and @3x
@@ -222,10 +264,8 @@ void _updateLaunchScreenStoryboard({
   final documentData = xmlDocument.getElement('document');
 
   // Find the view that contains the splash image
-  final view =
-      documentData?.descendants.whereType<XmlElement>().firstWhere((element) {
-    return element.name.qualified == 'view' &&
-        element.getAttribute('id') == 'Ze5-6b-2t3';
+  final view = documentData?.descendants.whereType<XmlElement>().firstWhere((element) {
+    return element.name.qualified == 'view' && element.getAttribute('id') == 'Ze5-6b-2t3';
   });
   if (view == null) {
     print(
@@ -247,8 +287,7 @@ void _updateLaunchScreenStoryboard({
   }
   final imageView = subViews.children.whereType<XmlElement>().firstWhere(
     (element) =>
-        element.name.qualified == 'imageView' &&
-        element.getAttribute('image') == _flavorHelper.iOSLaunchImageName,
+        element.name.qualified == 'imageView' && element.getAttribute('image') == _flavorHelper.iOSLaunchImageName,
     orElse: () {
       print(
         'Not able to find "${_flavorHelper.iOSLaunchImageName}" in ${_flavorHelper.iOSLaunchScreenStoryboardName}.storyboard. Image '
@@ -260,14 +299,11 @@ void _updateLaunchScreenStoryboard({
   );
   subViews.children.whereType<XmlElement>().firstWhere(
     (element) =>
-        element.name.qualified == 'imageView' &&
-        element.getAttribute('image') == _flavorHelper.iOSLaunchBackgroundName,
+        element.name.qualified == 'imageView' && element.getAttribute('image') == _flavorHelper.iOSLaunchBackgroundName,
     orElse: () {
       subViews.children.insert(
         0,
-        XmlDocument.parse(_flavorHelper.iOSLaunchBackgroundSubView)
-            .rootElement
-            .copy(),
+        XmlDocument.parse(_flavorHelper.iOSLaunchBackgroundSubView).rootElement.copy(),
       );
       return XmlElement(XmlName(''));
     },
@@ -275,14 +311,11 @@ void _updateLaunchScreenStoryboard({
   // Update the fill property
   imageView.setAttribute('contentMode', iosContentMode);
 
-  if (!['bottom', 'bottomRight', 'bottomLeft']
-      .contains(iosBrandingContentModeValue)) {
+  if (!['bottom', 'bottomRight', 'bottomLeft'].contains(iosBrandingContentModeValue)) {
     iosBrandingContentModeValue = 'bottom';
   }
-  if (brandingImagePath != null &&
-      iosBrandingContentModeValue != iosContentMode) {
-    final brandingImageView =
-        subViews.children.whereType<XmlElement>().firstWhere(
+  if (brandingImagePath != null && iosBrandingContentModeValue != iosContentMode) {
+    final brandingImageView = subViews.children.whereType<XmlElement>().firstWhere(
       (element) {
         return element.name.qualified == 'imageView' &&
             element.getAttribute('image') == _flavorHelper.iOSBrandingImageName;
@@ -290,9 +323,7 @@ void _updateLaunchScreenStoryboard({
       orElse: () {
         subViews.children.insert(
           subViews.children.length - 1,
-          XmlDocument.parse(_flavorHelper.iOSBrandingSubView)
-              .rootElement
-              .copy(),
+          XmlDocument.parse(_flavorHelper.iOSBrandingSubView).rootElement.copy(),
         );
         return XmlElement(XmlName(''));
       },
@@ -302,11 +333,8 @@ void _updateLaunchScreenStoryboard({
   }
   // Find the resources
   final resources = documentData?.getElement('resources');
-  final launchImageResource =
-      resources?.children.whereType<XmlElement>().firstWhere(
-    (element) =>
-        element.name.qualified == 'image' &&
-        element.getAttribute('name') == _flavorHelper.iOSLaunchImageName,
+  final launchImageResource = resources?.children.whereType<XmlElement>().firstWhere(
+    (element) => element.name.qualified == 'image' && element.getAttribute('name') == _flavorHelper.iOSLaunchImageName,
     orElse: () {
       print(
         'Not able to find "${_flavorHelper.iOSLaunchImageName}" in ${_flavorHelper.iOSLaunchScreenStoryboardName}.storyboard. Image '
@@ -319,8 +347,7 @@ void _updateLaunchScreenStoryboard({
 
   resources?.children.whereType<XmlElement>().firstWhere(
     (element) =>
-        element.name.qualified == 'image' &&
-        element.getAttribute('name') == _flavorHelper.iOSLaunchBackgroundName,
+        element.name.qualified == 'image' && element.getAttribute('name') == _flavorHelper.iOSLaunchBackgroundName,
     orElse: () {
       // If the color has not been set via background image, set it here:
 
@@ -349,11 +376,9 @@ void _updateLaunchScreenStoryboard({
   }
 
   if (brandingImagePath != null) {
-    final brandingImageResource =
-        resources?.children.whereType<XmlElement>().firstWhere(
+    final brandingImageResource = resources?.children.whereType<XmlElement>().firstWhere(
       (element) =>
-          element.name.qualified == 'image' &&
-          element.getAttribute('name') == _flavorHelper.iOSBrandingImageName,
+          element.name.qualified == 'image' && element.getAttribute('name') == _flavorHelper.iOSBrandingImageName,
       orElse: () {
         resources.children.add(
           XmlDocument.parse(
@@ -380,8 +405,7 @@ void _updateLaunchScreenStoryboard({
     }
     final element = view.getElement('constraints');
 
-    final toParseBottomPadding =
-        toParse.replaceAll("{bottom_padding}", brandingBottomPadding ?? "0");
+    final toParseBottomPadding = toParse.replaceAll("{bottom_padding}", brandingBottomPadding ?? "0");
     print("[iOS] branding bottom padding: ${brandingBottomPadding ?? "0"}");
     final doc = XmlDocument.parse(toParseBottomPadding).rootElement.copy();
     if (doc.firstChild != null) {
@@ -524,15 +548,14 @@ void _updateInfoPlistFile({
 
   if (elementFound) {
     final index = dict.children.indexOf(uIStatusBarHidden);
-    final uIStatusBarHiddenValue = dict.children[index + 1].following
-        .firstWhere((element) => element.nodeType == XmlNodeType.ELEMENT);
+    final uIStatusBarHiddenValue =
+        dict.children[index + 1].following.firstWhere((element) => element.nodeType == XmlNodeType.ELEMENT);
     uIStatusBarHiddenValue.replace(XmlElement(XmlName(fullscreen.toString())));
   }
 
   elementFound = true;
   if (fullscreen) {
-    final uIViewControllerBasedStatusBarAppearance =
-        dict.children.whereType<XmlElement>().firstWhere(
+    final uIViewControllerBasedStatusBarAppearance = dict.children.whereType<XmlElement>().firstWhere(
       (element) {
         return element.innerText == 'UIViewControllerBasedStatusBarAppearance';
       },
@@ -552,14 +575,11 @@ void _updateInfoPlistFile({
     );
 
     if (elementFound) {
-      final index =
-          dict.children.indexOf(uIViewControllerBasedStatusBarAppearance);
+      final index = dict.children.indexOf(uIViewControllerBasedStatusBarAppearance);
 
-      final uIViewControllerBasedStatusBarAppearanceValue = dict
-          .children[index + 1].following
-          .firstWhere((element) => element.nodeType == XmlNodeType.ELEMENT);
-      uIViewControllerBasedStatusBarAppearanceValue
-          .replace(XmlElement(XmlName('false')));
+      final uIViewControllerBasedStatusBarAppearanceValue =
+          dict.children[index + 1].following.firstWhere((element) => element.nodeType == XmlNodeType.ELEMENT);
+      uIViewControllerBasedStatusBarAppearanceValue.replace(XmlElement(XmlName('false')));
     }
   }
 

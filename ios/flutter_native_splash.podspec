@@ -16,6 +16,7 @@ A new Flutter project.
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
+  s.dependency 'lottie-ios'
   s.platform = :ios, '9.0'
   s.resource_bundles = {'flutter_native_splash_privacy' => ['Resources/PrivacyInfo.xcprivacy']}
 

@@ -98,6 +98,30 @@ class _FlavorHelper {
     return _iOSFlavorName;
   }
 
+  String get iosLottieConfigContentsPath {
+    return '${iOSAssetsLottieSplashConfigFolder}Contents.json';
+  }
+
+  String get iosLottieConfigPath {
+    return '${iOSAssetsLottieSplashConfigFolder}Config.json';
+  }
+
+  String get iosLottieContentsPath {
+    return '${iOSAssetsLottieSplashDataFolder}Contents.json';
+  }
+
+  String get iosLottiePath {
+    return '${iOSAssetsLottieSplashDataFolder}lottie_splash.json';
+  }
+
+  String get iOSAssetsLottieSplashConfigFolder {
+    return 'ios/Runner/Assets.xcassets/LottieConfig$_iOSFlavorName.dataset/';
+  }
+
+  String get iOSAssetsLottieSplashDataFolder {
+    return 'ios/Runner/Assets.xcassets/LottieSplash$_iOSFlavorName.dataset/';
+  }
+
   String get iOSAssetsLaunchImageFolder {
     return 'ios/Runner/Assets.xcassets/LaunchImage$_iOSFlavorName.imageset/';
   }

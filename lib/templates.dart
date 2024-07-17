@@ -168,6 +168,43 @@ const String _iOSLaunchScreenStoryboardContent = '''
 </document>
 ''';
 
+String _iosLottieConfigurationJson({required int width, required int height}) => '''
+{
+  "width" : $width,
+  "height" : $height
+}
+''';
+
+const String _iosLottieConfigContentsJson = '''
+{
+  "data" : [
+    {
+      "filename" : "Config.json",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
+''';
+
+const String _iosLottieContentsJson = '''
+{
+  "data" : [
+    {
+      "filename" : "lottie_splash.json",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
+''';
+
 const String _iOSContentsJson = '''
 {
   "images" : [

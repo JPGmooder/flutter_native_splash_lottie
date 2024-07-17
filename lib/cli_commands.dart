@@ -140,6 +140,8 @@ void _createSplashByConfig(Map<String, dynamic> config) {
     if (Directory('android').existsSync()) {
       _createAndroidSplash(
         lottie: lottieAndroid ?? lottie,
+        lottieHeight: lottieAndroidHeight ?? lottieHeight,
+        lottieWidth: lottieAndroidWidth ?? lottieWidth,
         imagePath: imageAndroid ?? image,
         darkImagePath: darkImageAndroid ?? darkImage,
         brandingImagePath: brandingImageAndroid ?? brandingImage,
@@ -171,6 +173,8 @@ void _createSplashByConfig(Map<String, dynamic> config) {
     if (Directory('ios').existsSync()) {
       _createiOSSplash(
         lottie: lottieIos ?? lottie,
+        lottieHeight: lottieIosHeight ?? lottieHeight,
+        lottieWidth: lottieIosWidth ?? lottieWidth,
         imagePath: imageIos ?? image,
         darkImagePath: darkImageIos ?? darkImage,
         backgroundImage: backgroundImageIos ?? backgroundImage,

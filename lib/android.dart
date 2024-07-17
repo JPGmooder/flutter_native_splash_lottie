@@ -70,51 +70,53 @@ void _createAndroidSplash({
   required String? screenOrientation,
   String? android12BrandingImagePath,
   String? android12DarkBrandingImagePath,
+  int? lottieHeight,
+  int? lottieWidth,
 }) {
-  if (lottie == null) {
-    _applyImageAndroid(imagePath: imagePath);
+  _applyImageAndroid(imagePath: imagePath);
 
-    _applyImageAndroid(imagePath: darkImagePath, dark: true);
+  _applyImageAndroid(imagePath: darkImagePath, dark: true);
 
-    //create resources for branding image if provided
-    _applyImageAndroid(imagePath: brandingImagePath, fileName: 'branding.png');
+  //create resources for branding image if provided
+  _applyImageAndroid(imagePath: brandingImagePath, fileName: 'branding.png');
 
-    _applyImageAndroid(
-      imagePath: brandingDarkImagePath,
-      dark: true,
-      fileName: 'branding.png',
-    );
+  _applyImageAndroid(
+    imagePath: brandingDarkImagePath,
+    dark: true,
+    fileName: 'branding.png',
+  );
 
-    //create android 12 image if provided.  (otherwise uses launch icon)
-    _applyImageAndroid(
-      imagePath: android12ImagePath,
-      fileName: 'android12splash.png',
-    );
+  //create android 12 image if provided.  (otherwise uses launch icon)
+  _applyImageAndroid(
+    imagePath: android12ImagePath,
+    fileName: 'android12splash.png',
+  );
 
-    _applyImageAndroid(
-      imagePath: android12DarkImagePath,
-      dark: true,
-      fileName: 'android12splash.png',
-    );
+  _applyImageAndroid(
+    imagePath: android12DarkImagePath,
+    dark: true,
+    fileName: 'android12splash.png',
+  );
 
-    _applyImageAndroid(
-      imagePath: android12BrandingImagePath,
-      android12: true,
-      fileName: 'android12branding.png',
-    );
+  _applyImageAndroid(
+    imagePath: android12BrandingImagePath,
+    android12: true,
+    fileName: 'android12branding.png',
+  );
 
-    _applyImageAndroid(
-      imagePath: android12DarkBrandingImagePath,
-      dark: true,
-      android12: true,
-      fileName: 'android12branding.png',
-    );
+  _applyImageAndroid(
+    imagePath: android12DarkBrandingImagePath,
+    dark: true,
+    android12: true,
+    fileName: 'android12branding.png',
+  );
 
-    _deleteLottieAndroid();
-  } else {
+  if (lottie != null) {
     _applyLottieAndroid(
       lottiePath: lottie,
     );
+  } else {
+    _deleteLottieAndroid();
   }
 
   _createBackground(
@@ -138,7 +140,9 @@ void _createAndroidSplash({
   print('[Android] Updating launch background(s) with splash image path...');
 
   _applyLaunchBackgroundXml(
-    useLottie: true,
+    useLottie: lottie != null,
+    lottieHeight: lottieHeight,
+    lottieWidth: lottieWidth,
     gravity: gravity,
     launchBackgroundFilePath: _flavorHelper.androidLaunchBackgroundFile,
     showImage: imagePath != null,
@@ -368,7 +372,6 @@ void _applyLaunchBackgroundXml({
 
   if (useLottie) {
     final launchLottieFile = File(_flavorHelper.androidLottieXMLPath);
-    
     final lottieName = File(_flavorHelper.androidLottiePath).uri.pathSegments.last.split('.').first;
     final splashItem =
         XmlDocument.parse(_androidLottieItemXml(height: lottieHeight, width: lottieWidth, name: lottieName))
